@@ -1,3 +1,9 @@
 {
-  "states": []
+  "states": [
+    {
+      "id": "caustic-wax-petal-dandelion",
+      "status": "growing",
+      "activated_at": null
+    }
+  ]
 }
