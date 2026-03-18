@@ -1,9 +1,3 @@
 {
-  "states": [
-    {
-      "id": "caustic-wax-petal-dandelion",
-      "status": "cooldown",
-      "activated_at": "2026-03-18T11:55:00.000Z"
-    }
-  ]
+  "states": []
 }
