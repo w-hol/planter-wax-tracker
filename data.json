@@ -1,9 +1,3 @@
 {
-  "states": [
-    {
-      "id": "caustic-wax-plastic-rose",
-      "status": "cooldown",
-      "activated_at": "2026-03-18T11:53:00.000Z"
-    }
-  ]
+  "states": []
 }
