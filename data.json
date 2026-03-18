@@ -1,3 +1,9 @@
 {
-  "states": []
+  "states": [
+    {
+      "id": "caustic-wax-plastic-rose",
+      "status": "growing",
+      "activated_at": null
+    }
+  ]
 }
