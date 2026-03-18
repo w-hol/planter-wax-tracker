@@ -1,6 +1,11 @@
 {
   "states": [
     {
+      "id": "caustic-wax-hydroponic-coconut",
+      "status": "growing",
+      "activated_at": null
+    },
+    {
       "id": "caustic-wax-petal-dandelion",
       "status": "growing",
       "activated_at": null
