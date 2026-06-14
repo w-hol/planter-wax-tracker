@@ -1,0 +1,22 @@
+Caustic:
+
+Plastic in Rose
+Red Clay in Clover
+Blue Clay in Clover
+Candy in Mountain Top
+Tacky in Bamboo
+Heat Treated in Coconut
+Hydroponic in Coconut
+Petal in Dandelion
+
+Swirled:
+
+Plastic in Coconut
+Red Clay in Sunflower
+Blue Clay in Spider
+Candy in Cactus
+Tacky in Pumpkin
+Pesticide in Strawberry
+Heat Treated in Blue Flower
+Hydroponic in Mushroom
+Petal in Strawberry

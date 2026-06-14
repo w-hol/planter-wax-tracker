@@ -1,0 +1,121 @@
+[
+  {
+    "id": "caustic-wax-plastic-rose",
+    "wax": "Caustic Wax",
+    "planter": "Plastic Planter",
+    "field": "Rose Field",
+    "duration": 7200
+  },
+  {
+    "id": "caustic-wax-red-clay-clover",
+    "wax": "Caustic Wax",
+    "planter": "Red Clay Planter",
+    "field": "Clover Field",
+    "duration": 19800
+  },
+  {
+    "id": "caustic-wax-blue-clay-clover",
+    "wax": "Caustic Wax",
+    "planter": "Blue Clay Planter",
+    "field": "Clover Field",
+    "duration": 19800
+  },
+  {
+    "id": "caustic-wax-candy-mountain-top",
+    "wax": "Caustic Wax",
+    "planter": "Candy Planter",
+    "field": "Mountain Top Field",
+    "duration": 14400
+  },
+  {
+    "id": "caustic-wax-tacky-bamboo",
+    "wax": "Caustic Wax",
+    "planter": "Tacky Planter",
+    "field": "Bamboo Field",
+    "duration": 28800
+  },
+  {
+    "id": "caustic-wax-heat-treated-coconut",
+    "wax": "Caustic Wax",
+    "planter": "Heat Treated Planter",
+    "field": "Coconut Field",
+    "duration": 41418
+  },
+  {
+    "id": "caustic-wax-hydroponic-coconut",
+    "wax": "Caustic Wax",
+    "planter": "Hydroponic Planter",
+    "field": "Coconut Field",
+    "duration": 42310
+  },
+  {
+    "id": "caustic-wax-petal-dandelion",
+    "wax": "Caustic Wax",
+    "planter": "Petal Planter",
+    "field": "Dandelion Field",
+    "duration": 28980
+  },
+  {
+    "id": "swirled-wax-plastic-coconut",
+    "wax": "Swirled Wax",
+    "planter": "Plastic Planter",
+    "field": "Coconut Field",
+    "duration": 7200
+  },
+  {
+    "id": "swirled-wax-red-clay-sunflower",
+    "wax": "Swirled Wax",
+    "planter": "Red Clay Planter",
+    "field": "Sunflower Field",
+    "duration": 20790
+  },
+  {
+    "id": "swirled-wax-blue-clay-spider",
+    "wax": "Swirled Wax",
+    "planter": "Blue Clay Planter",
+    "field": "Spider Field",
+    "duration": 21600
+  },
+  {
+    "id": "swirled-wax-candy-cactus",
+    "wax": "Swirled Wax",
+    "planter": "Candy Planter",
+    "field": "Cactus Field",
+    "duration": 14400
+  },
+  {
+    "id": "swirled-wax-tacky-pumpkin",
+    "wax": "Swirled Wax",
+    "planter": "Tacky Planter",
+    "field": "Pumpkin Field",
+    "duration": 28800
+  },
+  {
+    "id": "swirled-wax-pesticide-strawberry",
+    "wax": "Swirled Wax",
+    "planter": "Pesticide Planter",
+    "field": "Strawberry Field",
+    "duration": 25200
+  },
+  {
+    "id": "swirled-wax-heat-treated-blue-flower",
+    "wax": "Swirled Wax",
+    "planter": "Heat Treated Planter",
+    "field": "Blue Flower Field",
+    "duration": 43200
+  },
+  {
+    "id": "swirled-wax-hydroponic-mushroom",
+    "wax": "Swirled Wax",
+    "planter": "Hydroponic Planter",
+    "field": "Mushroom Field",
+    "duration": 43200
+  },
+  {
+    "id": "swirled-wax-petal-strawberry",
+    "wax": "Swirled Wax",
+    "planter": "Petal Planter",
+    "field": "Strawberry Field",
+    "duration": 44100
+  }
+]
