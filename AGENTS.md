@@ -2,7 +2,7 @@
 
 ## Project Shape
 
-- Static GitHub Pages app built with React, TypeScript, Vite, Tailwind CSS, and shadcn-style local components.
+- Static GitHub Pages app built with React, TypeScript, Vite, Tailwind CSS, and Material 3-inspired local components.
 - The app is always dark themed.
 - There is no backend. Browser code reads and writes `planter-wax-tracker.json` inside a GitHub Gist through the GitHub Gist API.
 - The GitHub Personal Access Token and Gist ID are supplied by the user in the setup screen, stored in `localStorage`, and must never be committed or hardcoded.

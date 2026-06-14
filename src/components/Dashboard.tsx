@@ -6,9 +6,16 @@ import { EntryCard } from "@/components/EntryCard";
 import { HarvestDialog } from "@/components/HarvestDialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getWaxImageUrl } from "@/lib/images";
+import { AssetTile } from "@/components/AssetTile";
 import { getDisplayStatus } from "@/lib/time";
-import { ChevronDown, LogOut, RefreshCw } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  LogOut,
+  RefreshCw,
+  Sprout,
+  TimerReset,
+} from "lucide-react";
 import { getSections, mergeWithMasterList, toStoredStates } from "@/lib/tracker";
 
 interface DashboardProps {
@@ -107,9 +114,27 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
   const sections = getSections(combos);
   const summaryCards = [
-    { label: "Ready", value: sections.ready.length, tone: "text-emerald-300" },
-    { label: "Growing", value: sections.growing.length, tone: "text-sky-300" },
-    { label: "Cooldown", value: sections.cooldown.length, tone: "text-amber-300" },
+    {
+      label: "Ready",
+      value: sections.ready.length,
+      icon: CheckCircle2,
+      tone: "text-primary",
+      tile: "bg-primary/18 text-primary ring-primary/20",
+    },
+    {
+      label: "Growing",
+      value: sections.growing.length,
+      icon: Sprout,
+      tone: "text-secondary",
+      tile: "bg-secondary/18 text-secondary ring-secondary/20",
+    },
+    {
+      label: "Cooldown",
+      value: sections.cooldown.length,
+      icon: TimerReset,
+      tone: "text-accent",
+      tile: "bg-accent/18 text-accent ring-accent/20",
+    },
   ];
   const waxGroups = ["Caustic Wax", "Swirled Wax"].map((wax) => {
     const groupCombos = combos.filter((combo) => combo.wax === wax);
@@ -137,90 +162,121 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 border-b border-border/70 bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <h1 className="text-xl font-bold">Planter Wax Tracker</h1>
-          <div className="flex gap-2">
+      <header className="sticky top-0 z-20 border-b border-outline bg-background/90 supports-backdrop-filter:backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              Bee Swarm
+            </p>
+            <h1 className="truncate text-xl font-semibold sm:text-2xl">
+              Planter Wax Tracker
+            </h1>
+          </div>
+          <div className="flex shrink-0 gap-2">
             <Button
               size="sm"
-              variant="outline"
+              variant="tonal"
               onClick={loadData}
               disabled={loading}
             >
-              <RefreshCw className={`h-3.5 w-3.5 mr-1 ${loading ? "animate-spin" : ""}`} />
+              <RefreshCw className={loading ? "animate-spin" : ""} />
               Refresh
             </Button>
-            <Button size="sm" variant="ghost" onClick={handleLogout}>
-              <LogOut className="h-3.5 w-3.5" />
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              onClick={handleLogout}
+              aria-label="Log out"
+            >
+              <LogOut />
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-        {error && (
-          <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
+      {saving && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="m3-elevation-2 fixed left-1/2 top-4 z-50 flex -translate-x-1/2 items-center gap-2 rounded-4xl border border-outline bg-surface-container-high px-4 py-2 text-sm font-semibold text-foreground"
+        >
+          <RefreshCw className="size-4 animate-spin text-primary" />
+          Saving changes
+        </div>
+      )}
 
-        {saving && (
-          <div className="rounded-md bg-muted p-2 text-sm text-muted-foreground text-center">
-            Saving…
+      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+        {error && (
+          <div className="rounded-[1.5rem] border border-destructive/25 bg-destructive/12 px-4 py-3 text-sm font-medium text-destructive">
+            {error}
           </div>
         )}
 
         <section className="grid gap-3 sm:grid-cols-3">
           {summaryCards.map((card) => (
-            <Card key={card.label} className="gap-0 border-border/70 bg-card/90 py-0">
-              <CardContent className="space-y-1 p-4">
-                <p className="text-sm text-muted-foreground">{card.label}</p>
-                <p className={`text-3xl font-bold ${card.tone}`}>{card.value}</p>
+            <Card
+              key={card.label}
+              className="gap-0 border-outline bg-surface-container py-0"
+            >
+              <CardContent className="flex items-center justify-between gap-4 p-5">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-muted-foreground">
+                    {card.label}
+                  </p>
+                  <p className={`text-4xl font-semibold leading-none ${card.tone}`}>
+                    {card.value}
+                  </p>
+                </div>
+                <div
+                  className={`grid size-12 place-items-center rounded-[1.35rem] ring-1 ${card.tile}`}
+                >
+                  <card.icon className="size-6" />
+                </div>
               </CardContent>
             </Card>
           ))}
         </section>
 
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading…</div>
+          <div className="rounded-[2rem] border border-outline bg-surface-container-low p-8 text-center text-sm font-medium text-muted-foreground">
+            Loading tracker data
+          </div>
         ) : (
           <>
             {waxGroups.map((group) => (
-              <section key={group.wax}>
+              <section key={group.wax} className="space-y-3">
                 <button
                   type="button"
                   onClick={() => toggleGroup(group.wax)}
-                  className="flex w-full items-center justify-between rounded-xl border border-border/70 bg-card/85 px-4 py-4 text-left shadow-lg shadow-black/10 transition hover:bg-card"
+                  className="m3-state-layer flex w-full flex-col gap-4 rounded-[2rem] border border-outline bg-surface-container-low p-4 text-left transition hover:bg-surface-container sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={getWaxImageUrl(group.wax)}
-                      alt=""
-                      className="h-14 w-14 rounded-xl border border-border/70 bg-background/40 object-contain p-1"
-                    />
+                  <div className="flex min-w-0 items-center gap-4">
+                    <AssetTile type="wax" name={group.wax} size="lg" />
                     <div>
-                      <h2 className="text-lg font-semibold">{group.wax}</h2>
-                      <p className="text-sm text-muted-foreground">
+                      <h2 className="text-lg font-semibold leading-tight">
+                        {group.wax}
+                      </h2>
+                      <p className="mt-1 text-sm font-medium text-muted-foreground">
                         {group.combos.length} combinations
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600">
+                  <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+                    <Badge className="bg-primary/18 text-primary ring-1 ring-primary/20 hover:bg-primary/18">
                       {group.ready} ready
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="border-sky-500/60 bg-sky-500/10 text-sky-300"
+                      className="border-secondary/25 bg-secondary/14 text-secondary"
                     >
                       {group.growing} growing
                     </Badge>
-                    <Badge variant="destructive" className="bg-rose-600/90">
+                    <Badge className="bg-accent/16 text-accent ring-1 ring-accent/20 hover:bg-accent/16">
                       {group.cooldown} cooldown
                     </Badge>
                     <ChevronDown
-                      className={`h-5 w-5 transition-transform ${
+                      className={`ml-auto size-5 shrink-0 text-muted-foreground transition-transform sm:ml-1 ${
                         openGroups[group.wax] ? "rotate-180" : ""
                       }`}
                     />
@@ -228,7 +284,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
                 </button>
 
                 {openGroups[group.wax] && (
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                     {group.combos.map((combo) => (
                       <EntryCard
                         key={combo.id}
@@ -247,6 +303,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
       </main>
 
       <HarvestDialog
+        key={activeCombo?.id ?? "harvest-closed"}
         open={harvestOpen}
         onClose={() => {
           setHarvestOpen(false);

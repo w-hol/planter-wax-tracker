@@ -40,16 +40,16 @@ export function formatElapsed(startedAt: string): string {
   const elapsed = Date.now() - new Date(startedAt).getTime();
 
   if (elapsed <= 0) {
-    return "Started just now";
+    return "Just now";
   }
 
   const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
   const hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
 
-  if (days > 0) return `Growing for ${days}d ${hours}h`;
-  if (hours > 0) return `Growing for ${hours}h ${minutes}m`;
-  return `Growing for ${minutes}m`;
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
 }
 
 function formatSpan(ms: number): string {
@@ -77,15 +77,6 @@ export function formatAvailableFor(readyAt: string): string {
 export function getCooldownProgress(activatedAt: string): number {
   const elapsed = Date.now() - new Date(activatedAt).getTime();
   const progress = (elapsed / COOLDOWN_MS) * 100;
-  return Math.max(0, Math.min(100, progress));
-}
-
-export function getGrowthProgress(
-  startedAt: string,
-  durationSeconds: number
-): number {
-  const elapsed = Date.now() - new Date(startedAt).getTime();
-  const progress = (elapsed / (durationSeconds * 1000)) * 100;
   return Math.max(0, Math.min(100, progress));
 }
 

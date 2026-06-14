@@ -3,6 +3,7 @@ import type { TrackedWaxCombo } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Clock3 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,10 @@ export function HarvestDialog({
     toLocalDateTimeInput(new Date().toISOString())
   );
 
+  function resetToNow() {
+    setActivatedAt(toLocalDateTimeInput(new Date().toISOString()));
+  }
+
   if (!combo) return null;
 
   function handleSubmit(e: React.FormEvent) {
@@ -50,7 +55,13 @@ export function HarvestDialog({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="harvest-time">Harvest Time</Label>
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="harvest-time">Harvest time</Label>
+              <Button type="button" variant="tonal" size="sm" onClick={resetToNow}>
+                <Clock3 />
+                Reset to now
+              </Button>
+            </div>
             <Input
               id="harvest-time"
               type="datetime-local"
@@ -63,7 +74,7 @@ export function HarvestDialog({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Confirm</Button>
+            <Button type="submit">Start cooldown</Button>
           </DialogFooter>
         </form>
       </DialogContent>

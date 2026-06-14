@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { AssetTile } from "@/components/AssetTile";
 import {
   createDataGist,
   setConfig,
@@ -55,13 +56,23 @@ export function SetupScreen({ onComplete }: SetupScreenProps) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md border-border/70 bg-card/95 shadow-2xl shadow-black/20">
-        <CardHeader>
-          <CardTitle className="text-2xl">Planter Wax Tracker</CardTitle>
+    <div className="flex min-h-screen items-center justify-center px-4 py-8">
+      <Card className="w-full max-w-md border-outline bg-surface-container">
+        <CardHeader className="gap-4">
+          <div className="flex items-center gap-4">
+            <AssetTile type="wax" name="Swirled Wax" size="lg" />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Setup
+              </p>
+              <CardTitle className="text-2xl">Planter Wax Tracker</CardTitle>
+            </div>
+          </div>
           <CardDescription>
             Enter a GitHub Personal Access Token with{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-xs">gist</code>{" "}
+            <code className="rounded-md bg-surface-container-high px-1.5 py-0.5 text-xs text-foreground">
+              gist
+            </code>{" "}
             access to sync through a private Gist.
             <br />
             Your token is stored locally and only sent to GitHub's API.
@@ -90,8 +101,12 @@ export function SetupScreen({ onComplete }: SetupScreenProps) {
                 disabled={loading}
               />
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
+            {error && (
+              <p className="rounded-2xl border border-destructive/25 bg-destructive/12 px-3 py-2 text-sm font-medium text-destructive">
+                {error}
+              </p>
+            )}
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
               {loading ? "Connecting…" : "Save & Continue"}
             </Button>
           </form>

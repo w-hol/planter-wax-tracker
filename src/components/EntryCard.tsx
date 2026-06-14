@@ -11,13 +11,9 @@ import {
   formatElapsed,
   getCooldownProgress,
   getDisplayStatus,
-  getGrowthProgress,
   getReadyDate,
 } from "@/lib/time";
-import {
-  getFieldImageUrl,
-  getPlanterImageUrl,
-} from "@/lib/images";
+import { AssetTile } from "@/components/AssetTile";
 import {
   Clock3,
   CheckCircle2,
@@ -45,20 +41,16 @@ export function EntryCard({
   const cooldownProgress = combo.activated_at
     ? getCooldownProgress(combo.activated_at)
     : 0;
-  const growthProgress =
-    combo.started_at && combo.duration
-      ? getGrowthProgress(combo.started_at, combo.duration)
-      : 0;
   const readySince =
     displayStatus === "ready" && combo.activated_at
       ? getReadyDate(combo.activated_at).toISOString()
       : null;
   const cardTone =
     displayStatus === "ready"
-      ? "border-emerald-500/35 bg-linear-to-br from-emerald-500/12 via-card to-card shadow-emerald-950/20"
+      ? "border-primary/25 bg-linear-to-br from-primary/12 via-card to-card"
       : displayStatus === "growing"
-        ? "border-sky-500/35 bg-linear-to-br from-sky-500/12 via-card to-card shadow-sky-950/20"
-        : "border-amber-500/35 bg-linear-to-br from-amber-500/12 via-card to-card shadow-amber-950/20";
+        ? "border-secondary/25 bg-linear-to-br from-secondary/12 via-card to-card"
+        : "border-accent/25 bg-linear-to-br from-accent/12 via-card to-card";
 
   useEffect(() => {
     if (
@@ -77,59 +69,55 @@ export function EntryCard({
     displayStatus === "growing" ? (
       <Badge
         variant="outline"
-        className="shrink-0 rounded-full border-sky-500/40 bg-sky-500/12 px-3 py-1.5 text-sky-200"
+        className="shrink-0 border-secondary/25 bg-secondary/14 text-secondary"
       >
-        <Sprout className="mr-1.5 h-3.5 w-3.5" />
+        <Sprout />
         Growing
       </Badge>
     ) : displayStatus === "ready" ? (
-      <Badge className="shrink-0 rounded-full bg-emerald-600/90 px-3 py-1.5 text-white hover:bg-emerald-600">
-        <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
+      <Badge className="shrink-0 bg-primary/18 text-primary ring-1 ring-primary/20 hover:bg-primary/18">
+        <CheckCircle2 />
         Ready
       </Badge>
     ) : (
       <Badge
-        variant="destructive"
-        className="shrink-0 rounded-full bg-amber-500/15 px-3 py-1.5 text-amber-200 ring-1 ring-amber-500/30"
+        variant="outline"
+        className="shrink-0 border-accent/25 bg-accent/14 text-accent"
       >
-        <TimerReset className="mr-1.5 h-3.5 w-3.5" />
+        <TimerReset />
         Cooldown
       </Badge>
     );
 
   return (
-    <Card className={`h-full gap-0 py-0 shadow-lg shadow-black/10 ${cardTone}`}>
-      <CardContent className="flex h-full min-h-[240px] flex-col gap-3 p-4">
+    <Card className={`h-full gap-0 py-0 ${cardTone}`}>
+      <CardContent className="flex h-full min-h-[260px] flex-col gap-4 p-4">
         <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 space-y-2.5">
-            <div className="rounded-xl border border-border/60 bg-background/35 p-2.5">
+          <div className="min-w-0 flex-1 space-y-2.5">
+            <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
               <div className="flex items-center gap-2">
-                <img
-                  src={getPlanterImageUrl(combo.planter)}
-                  alt=""
-                  className="h-10 w-10 rounded-md border border-border/70 bg-background/50 object-contain p-1"
-                />
+                <AssetTile type="planter" name={combo.planter} size="sm" />
                 <div className="min-w-0">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                     Planter
                   </p>
-                  <p className="truncate text-base font-semibold">{combo.planter}</p>
+                  <p className="truncate text-base font-semibold leading-tight">
+                    {combo.planter}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-border/60 bg-background/35 p-2.5">
+            <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
               <div className="flex items-center gap-2">
-                <img
-                  src={getFieldImageUrl(combo.field)}
-                  alt=""
-                  className="h-10 w-10 rounded-md border border-border/70 bg-background/50 object-cover"
-                />
+                <AssetTile type="field" name={combo.field} size="sm" />
                 <div className="min-w-0">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                     Field
                   </p>
-                  <p className="truncate text-base font-semibold">{combo.field}</p>
+                  <p className="truncate text-base font-semibold leading-tight">
+                    {combo.field}
+                  </p>
                 </div>
               </div>
             </div>
@@ -141,86 +129,74 @@ export function EntryCard({
         <div className="space-y-2 text-sm">
           {displayStatus === "ready" && (
             <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-2.5">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-emerald-200/70">
+              <div className="rounded-[1.35rem] border border-primary/20 bg-primary/12 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary/75">
                   Available
                 </p>
-                <p className="mt-1 font-medium text-emerald-200">
+                <p className="mt-1 font-semibold text-primary">
                   {readySince ? formatAvailableFor(readySince) : "Ready by default"}
                 </p>
               </div>
-              <div className="rounded-xl border border-border/60 bg-background/35 p-2.5">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                   Grow time
                 </p>
-                <p className="mt-1 font-medium">~ {formatDuration(combo.duration)}</p>
+                <p className="mt-1 font-semibold">{formatDuration(combo.duration)}</p>
               </div>
             </div>
           )}
 
           {displayStatus === "growing" && combo.started_at && (
-            <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-3">
-              <div className="mb-2 grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-sky-400/15 bg-background/20 p-2">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-sky-200/70">
-                    Growing for
+            <div className="rounded-[1.5rem] border border-secondary/25 bg-secondary/12 p-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-[1.1rem] border border-secondary/15 bg-background/20 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary/75">
+                    Time since planted
                   </p>
-                  <p className="mt-1 font-medium text-sky-100">
+                  <p className="mt-1 font-semibold text-secondary">
                     {formatElapsed(combo.started_at)}
                   </p>
                 </div>
-                <div className="rounded-lg border border-sky-400/15 bg-background/20 p-2">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-sky-200/70">
-                    Est. duration
+                <div className="rounded-[1.1rem] border border-secondary/15 bg-background/20 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary/75">
+                    Planted
                   </p>
-                  <p className="mt-1 font-medium text-sky-100">
-                    ~ {formatDuration(combo.duration)}
+                  <p className="mt-1 font-semibold text-secondary">
+                    {formatDate(combo.started_at)}
                   </p>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs text-sky-100/70">
-                  <span>Approx. growth progress</span>
-                  <span>{Math.round(growthProgress)}%</span>
-                </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-sky-950/70">
-                  <div
-                    className="h-full rounded-full bg-linear-to-r from-sky-400 via-cyan-300 to-emerald-300 transition-[width] duration-500"
-                    style={{ width: `${growthProgress}%` }}
-                  />
                 </div>
               </div>
             </div>
           )}
 
           {displayStatus === "cooldown" && combo.activated_at && (
-            <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3">
+            <div className="rounded-[1.5rem] border border-accent/25 bg-accent/12 p-3">
               <div className="mb-2 grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-amber-400/15 bg-background/20 p-2">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-amber-200/70">
+                <div className="rounded-[1.1rem] border border-accent/15 bg-background/20 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent/75">
                     Last harvested
                   </p>
-                  <p className="mt-1 font-medium text-amber-50">
+                  <p className="mt-1 font-semibold text-accent">
                     {formatDate(combo.activated_at)}
                   </p>
                 </div>
-                <div className="rounded-lg border border-amber-400/15 bg-background/20 p-2">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-amber-200/70">
+                <div className="rounded-[1.1rem] border border-accent/15 bg-background/20 p-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent/75">
                     Time remaining
                   </p>
-                  <p className="mt-1 font-medium text-amber-50">
+                  <p className="mt-1 font-semibold text-accent">
                     {formatCountdown(combo.activated_at)}
                   </p>
                 </div>
               </div>
               <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs text-amber-100/70">
+                <div className="flex items-center justify-between text-xs font-medium text-accent/75">
                   <span>Cooldown progress</span>
                   <span>{Math.round(cooldownProgress)}%</span>
                 </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-amber-950/70">
+                <div className="h-2.5 overflow-hidden rounded-full bg-background/55">
                   <div
-                    className="h-full rounded-full bg-linear-to-r from-rose-400 via-amber-400 to-emerald-300 transition-[width] duration-500"
+                    className="h-full rounded-full bg-linear-to-r from-destructive via-accent to-primary transition-[width] duration-500"
                     style={{ width: `${cooldownProgress}%` }}
                   />
                 </div>
@@ -229,15 +205,15 @@ export function EntryCard({
           )}
 
           {displayStatus === "ready" && combo.status === "cooldown" && (
-            <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-3">
-              <div className="mb-2 flex items-center gap-2 text-emerald-100">
+            <div className="rounded-[1.5rem] border border-primary/25 bg-primary/12 p-3">
+              <div className="mb-2 flex items-center gap-2 text-primary">
                 <Clock3 className="h-4 w-4" />
-                <p className="font-medium">Cooldown finished</p>
+                <p className="font-semibold">Cooldown finished</p>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-emerald-950/70">
-                <div className="h-full w-full rounded-full bg-linear-to-r from-emerald-400 to-lime-300" />
+              <div className="h-2 overflow-hidden rounded-full bg-background/55">
+                <div className="h-full w-full rounded-full bg-linear-to-r from-primary to-lime-300" />
               </div>
-              <p className="mt-2 text-emerald-300">
+              <p className="mt-2 text-primary">
                 This combo is available again and can be started whenever you want.
               </p>
             </div>
@@ -247,10 +223,11 @@ export function EntryCard({
         <div className="mt-auto grid grid-cols-2 gap-2 pt-1">
           {displayStatus === "ready" && (
             <Button
-              className="col-span-2 h-12 w-full text-sm font-semibold"
+              className="col-span-2 w-full"
+              size="lg"
               onClick={() => onStartGrowing(combo)}
             >
-              <Sprout className="mr-1.5 h-4 w-4" />
+              <Sprout />
               Set growing
             </Button>
           )}
@@ -258,18 +235,20 @@ export function EntryCard({
           {displayStatus === "growing" && (
             <>
               <Button
-                className="h-12 w-full text-sm font-semibold"
+                className="w-full"
+                size="lg"
                 onClick={() => onHarvest(combo)}
               >
-                <Hourglass className="mr-1.5 h-4 w-4" />
+                <Hourglass />
                 Harvest
               </Button>
               <Button
                 variant="outline"
-                className="h-12 w-full text-sm font-semibold"
+                className="w-full"
+                size="lg"
                 onClick={() => onClear(combo)}
               >
-                <RotateCcw className="mr-1.5 h-4 w-4" />
+                <RotateCcw />
                 Clear
               </Button>
             </>
@@ -278,10 +257,11 @@ export function EntryCard({
           {displayStatus === "cooldown" && (
             <Button
               variant="outline"
-              className="col-span-2 h-12 w-full text-sm font-semibold"
+              className="col-span-2 w-full"
+              size="lg"
               onClick={() => onClear(combo)}
             >
-              <RotateCcw className="mr-1.5 h-4 w-4" />
+              <RotateCcw />
               Reset
             </Button>
           )}
