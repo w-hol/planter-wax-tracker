@@ -57,10 +57,10 @@ export function HarvestDialog({
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3">
               <Label htmlFor="harvest-time">Harvest time</Label>
-              <Button type="button" variant="tonal" size="sm" onClick={resetToNow}>
-                <Clock3 />
-                Reset to now
-              </Button>
+            <Button type="button" variant="tonal" size="sm" onClick={resetToNow}>
+              <Clock3 />
+              Reset to now
+            </Button>
             </div>
             <Input
               id="harvest-time"

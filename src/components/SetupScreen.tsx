@@ -2,7 +2,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { AssetTile } from "@/components/AssetTile";
 import {
   createDataGist,
@@ -56,21 +62,23 @@ export function SetupScreen({ onComplete }: SetupScreenProps) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-8">
-      <Card className="w-full max-w-md border-outline bg-surface-container">
-        <CardHeader className="gap-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 text-on-surface">
+      <Card className="w-full max-w-md bg-surface-container-low py-0">
+        <CardHeader className="gap-4 p-5 pb-3">
           <div className="flex items-center gap-4">
-            <AssetTile type="wax" name="Swirled Wax" size="lg" />
+            <AssetTile type="wax" name="Swirled Wax" size="md" />
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="m3-label-small text-on-surface-variant">
                 Setup
               </p>
-              <CardTitle className="text-2xl">Planter Wax Tracker</CardTitle>
+              <CardTitle className="text-2xl font-medium">
+                Planter Wax Tracker
+              </CardTitle>
             </div>
           </div>
-          <CardDescription>
+          <CardDescription className="text-on-surface-variant">
             Enter a GitHub Personal Access Token with{" "}
-            <code className="rounded-md bg-surface-container-high px-1.5 py-0.5 text-xs text-foreground">
+            <code className="rounded-md bg-surface-container-high px-1.5 py-0.5 text-xs text-on-surface">
               gist
             </code>{" "}
             access to sync through a private Gist.
@@ -78,7 +86,7 @@ export function SetupScreen({ onComplete }: SetupScreenProps) {
             Your token is stored locally and only sent to GitHub's API.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-5 pt-2">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="token">GitHub Personal Access Token</Label>
@@ -102,12 +110,12 @@ export function SetupScreen({ onComplete }: SetupScreenProps) {
               />
             </div>
             {error && (
-              <p className="rounded-2xl border border-destructive/25 bg-destructive/12 px-3 py-2 text-sm font-medium text-destructive">
+              <p className="rounded-lg bg-error-container px-3 py-2 text-sm font-medium text-on-error-container">
                 {error}
               </p>
             )}
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? "Connecting…" : "Save & Continue"}
+              {loading ? "Connecting..." : "Save and continue"}
             </Button>
           </form>
         </CardContent>

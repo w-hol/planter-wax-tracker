@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import type { TrackedWaxCombo } from "@/lib/types";
+import type { LucideIcon } from "lucide-react";
+import type { TrackedWaxCombo, WaxStatus } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,48 @@ interface EntryCardProps {
   onClear: (combo: TrackedWaxCombo) => void;
 }
 
+interface StatusTone {
+  label: string;
+  icon: LucideIcon;
+  ring: string;
+  iconContainer: string;
+  badge: string;
+  panel: string;
+  progress: string;
+}
+
+const statusTones: Record<WaxStatus, StatusTone> = {
+  ready: {
+    label: "Ready",
+    icon: CheckCircle2,
+    ring: "ring-primary/18",
+    iconContainer: "bg-primary-container text-on-primary-container ring-primary/20",
+    badge: "bg-primary-container text-on-primary-container",
+    panel: "bg-primary-container/70 text-on-primary-container",
+    progress: "bg-primary",
+  },
+  growing: {
+    label: "Growing",
+    icon: Sprout,
+    ring: "ring-secondary/18",
+    iconContainer:
+      "bg-secondary-container text-on-secondary-container ring-secondary/20",
+    badge: "bg-secondary-container text-on-secondary-container",
+    panel: "bg-secondary-container/72 text-on-secondary-container",
+    progress: "bg-secondary",
+  },
+  cooldown: {
+    label: "Cooldown",
+    icon: TimerReset,
+    ring: "ring-tertiary/18",
+    iconContainer:
+      "bg-tertiary-container text-on-tertiary-container ring-tertiary/20",
+    badge: "bg-tertiary-container text-on-tertiary-container",
+    panel: "bg-tertiary-container/72 text-on-tertiary-container",
+    progress: "bg-tertiary",
+  },
+};
+
 export function EntryCard({
   combo,
   onStartGrowing,
@@ -38,6 +81,8 @@ export function EntryCard({
 }: EntryCardProps) {
   const [, setTick] = useState(0);
   const displayStatus = getDisplayStatus(combo);
+  const tone = statusTones[displayStatus];
+  const StatusIcon = tone.icon;
   const cooldownProgress = combo.activated_at
     ? getCooldownProgress(combo.activated_at)
     : 0;
@@ -45,12 +90,6 @@ export function EntryCard({
     displayStatus === "ready" && combo.activated_at
       ? getReadyDate(combo.activated_at).toISOString()
       : null;
-  const cardTone =
-    displayStatus === "ready"
-      ? "border-primary/25 bg-linear-to-br from-primary/12 via-card to-card"
-      : displayStatus === "growing"
-        ? "border-secondary/25 bg-linear-to-br from-secondary/12 via-card to-card"
-        : "border-accent/25 bg-linear-to-br from-accent/12 via-card to-card";
 
   useEffect(() => {
     if (
@@ -65,103 +104,90 @@ export function EntryCard({
     return () => clearInterval(interval);
   }, [combo.activated_at, combo.started_at, displayStatus, readySince]);
 
-  const statusBadge =
-    displayStatus === "growing" ? (
-      <Badge
-        variant="outline"
-        className="shrink-0 border-secondary/25 bg-secondary/14 text-secondary"
-      >
-        <Sprout />
-        Growing
-      </Badge>
-    ) : displayStatus === "ready" ? (
-      <Badge className="shrink-0 bg-primary/18 text-primary ring-1 ring-primary/20 hover:bg-primary/18">
-        <CheckCircle2 />
-        Ready
-      </Badge>
-    ) : (
-      <Badge
-        variant="outline"
-        className="shrink-0 border-accent/25 bg-accent/14 text-accent"
-      >
-        <TimerReset />
-        Cooldown
-      </Badge>
-    );
-
   return (
-    <Card className={`h-full gap-0 py-0 ${cardTone}`}>
+    <Card className={`h-full gap-0 bg-surface-container-low py-0 ${tone.ring}`}>
       <CardContent className="flex h-full min-h-[260px] flex-col gap-4 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1 space-y-2.5">
-            <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
-              <div className="flex items-center gap-2">
-                <AssetTile type="planter" name={combo.planter} size="sm" />
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                    Planter
-                  </p>
-                  <p className="truncate text-base font-semibold leading-tight">
-                    {combo.planter}
-                  </p>
-                </div>
-              </div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div
+              className={`grid size-11 shrink-0 place-items-center rounded-xl ring-1 ${tone.iconContainer}`}
+            >
+              <StatusIcon className="size-5" />
             </div>
-
-            <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
-              <div className="flex items-center gap-2">
-                <AssetTile type="field" name={combo.field} size="sm" />
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                    Field
-                  </p>
-                  <p className="truncate text-base font-semibold leading-tight">
-                    {combo.field}
-                  </p>
-                </div>
-              </div>
+            <div className="min-w-0">
+              <p className="m3-label-small truncate text-on-surface-variant">
+                {combo.wax}
+              </p>
+              <h3 className="truncate text-base font-medium leading-snug text-on-surface">
+                {combo.planter}
+              </h3>
+              <p className="truncate text-sm text-on-surface-variant">
+                {combo.field}
+              </p>
             </div>
           </div>
 
-          {statusBadge}
+          <Badge className={`shrink-0 ${tone.badge}`}>
+            <StatusIcon />
+            {tone.label}
+          </Badge>
         </div>
 
-        <div className="space-y-2 text-sm">
+        <div className="grid grid-cols-2 gap-3 border-y border-outline-variant py-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <AssetTile type="planter" name={combo.planter} size="sm" />
+            <div className="min-w-0">
+              <p className="m3-label-small text-on-surface-variant">Planter</p>
+              <p className="truncate text-sm font-medium text-on-surface">
+                {combo.planter}
+              </p>
+            </div>
+          </div>
+          <div className="flex min-w-0 items-center gap-2">
+            <AssetTile type="field" name={combo.field} size="sm" />
+            <div className="min-w-0">
+              <p className="m3-label-small text-on-surface-variant">Field</p>
+              <p className="truncate text-sm font-medium text-on-surface">
+                {combo.field}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-sm">
           {displayStatus === "ready" && (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-[1.35rem] border border-primary/20 bg-primary/12 p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary/75">
-                  Available
-                </p>
-                <p className="mt-1 font-semibold text-primary">
-                  {readySince ? formatAvailableFor(readySince) : "Ready by default"}
-                </p>
-              </div>
-              <div className="rounded-[1.35rem] border border-outline bg-surface-container-low/75 p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  Grow time
-                </p>
-                <p className="mt-1 font-semibold">{formatDuration(combo.duration)}</p>
+            <div className={`rounded-lg px-3 py-3 ${tone.panel}`}>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="m3-label-small opacity-80">Available</p>
+                  <p className="mt-1 font-medium">
+                    {readySince ? formatAvailableFor(readySince) : "Ready by default"}
+                  </p>
+                </div>
+                <div>
+                  <p className="m3-label-small opacity-80">Grow time</p>
+                  <p className="mt-1 font-medium">
+                    {formatDuration(combo.duration)}
+                  </p>
+                </div>
               </div>
             </div>
           )}
 
           {displayStatus === "growing" && combo.started_at && (
-            <div className="rounded-[1.5rem] border border-secondary/25 bg-secondary/12 p-3">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-[1.1rem] border border-secondary/15 bg-background/20 p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary/75">
+            <div className={`rounded-lg px-3 py-3 ${tone.panel}`}>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="m3-label-small opacity-80">
                     Time since planted
                   </p>
-                  <p className="mt-1 font-semibold text-secondary">
+                  <p className="mt-1 font-medium">
                     {formatElapsed(combo.started_at)}
                   </p>
                 </div>
-                <div className="rounded-[1.1rem] border border-secondary/15 bg-background/20 p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary/75">
-                    Planted
-                  </p>
-                  <p className="mt-1 font-semibold text-secondary">
+                <div>
+                  <p className="m3-label-small opacity-80">Planted</p>
+                  <p className="mt-1 font-medium">
                     {formatDate(combo.started_at)}
                   </p>
                 </div>
@@ -170,33 +196,29 @@ export function EntryCard({
           )}
 
           {displayStatus === "cooldown" && combo.activated_at && (
-            <div className="rounded-[1.5rem] border border-accent/25 bg-accent/12 p-3">
-              <div className="mb-2 grid grid-cols-2 gap-2">
-                <div className="rounded-[1.1rem] border border-accent/15 bg-background/20 p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent/75">
-                    Last harvested
-                  </p>
-                  <p className="mt-1 font-semibold text-accent">
+            <div className={`rounded-lg px-3 py-3 ${tone.panel}`}>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="m3-label-small opacity-80">Last harvested</p>
+                  <p className="mt-1 font-medium">
                     {formatDate(combo.activated_at)}
                   </p>
                 </div>
-                <div className="rounded-[1.1rem] border border-accent/15 bg-background/20 p-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent/75">
-                    Time remaining
-                  </p>
-                  <p className="mt-1 font-semibold text-accent">
+                <div>
+                  <p className="m3-label-small opacity-80">Time remaining</p>
+                  <p className="mt-1 font-medium">
                     {formatCountdown(combo.activated_at)}
                   </p>
                 </div>
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs font-medium text-accent/75">
+              <div className="mt-3 space-y-1.5">
+                <div className="flex items-center justify-between text-xs font-medium opacity-80">
                   <span>Cooldown progress</span>
                   <span>{Math.round(cooldownProgress)}%</span>
                 </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-background/55">
+                <div className="h-1.5 overflow-hidden rounded-full bg-surface/55">
                   <div
-                    className="h-full rounded-full bg-linear-to-r from-destructive via-accent to-primary transition-[width] duration-500"
+                    className={`h-full rounded-full transition-[width] duration-500 ${tone.progress}`}
                     style={{ width: `${cooldownProgress}%` }}
                   />
                 </div>
@@ -205,15 +227,15 @@ export function EntryCard({
           )}
 
           {displayStatus === "ready" && combo.status === "cooldown" && (
-            <div className="rounded-[1.5rem] border border-primary/25 bg-primary/12 p-3">
-              <div className="mb-2 flex items-center gap-2 text-primary">
-                <Clock3 className="h-4 w-4" />
-                <p className="font-semibold">Cooldown finished</p>
+            <div className="mt-3 rounded-lg bg-primary-container/70 px-3 py-3 text-on-primary-container">
+              <div className="mb-2 flex items-center gap-2">
+                <Clock3 className="size-4" />
+                <p className="font-medium">Cooldown finished</p>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-background/55">
-                <div className="h-full w-full rounded-full bg-linear-to-r from-primary to-lime-300" />
+              <div className="h-1.5 overflow-hidden rounded-full bg-surface/55">
+                <div className="h-full w-full rounded-full bg-primary" />
               </div>
-              <p className="mt-2 text-primary">
+              <p className="mt-2">
                 This combo is available again and can be started whenever you want.
               </p>
             </div>

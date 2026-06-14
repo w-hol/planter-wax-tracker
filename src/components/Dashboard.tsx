@@ -118,22 +118,25 @@ export function Dashboard({ onLogout }: DashboardProps) {
       label: "Ready",
       value: sections.ready.length,
       icon: CheckCircle2,
+      supporting: "Available now",
       tone: "text-primary",
-      tile: "bg-primary/18 text-primary ring-primary/20",
+      tile: "bg-primary-container text-on-primary-container ring-primary/20",
     },
     {
       label: "Growing",
       value: sections.growing.length,
       icon: Sprout,
+      supporting: "Awaiting harvest",
       tone: "text-secondary",
-      tile: "bg-secondary/18 text-secondary ring-secondary/20",
+      tile: "bg-secondary-container text-on-secondary-container ring-secondary/20",
     },
     {
       label: "Cooldown",
       value: sections.cooldown.length,
       icon: TimerReset,
-      tone: "text-accent",
-      tile: "bg-accent/18 text-accent ring-accent/20",
+      supporting: "Recovering",
+      tone: "text-tertiary",
+      tile: "bg-tertiary-container text-on-tertiary-container ring-tertiary/20",
     },
   ];
   const waxGroups = ["Caustic Wax", "Swirled Wax"].map((wax) => {
@@ -161,16 +164,19 @@ export function Dashboard({ onLogout }: DashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-20 border-b border-outline bg-background/90 supports-backdrop-filter:backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Bee Swarm
-            </p>
-            <h1 className="truncate text-xl font-semibold sm:text-2xl">
-              Planter Wax Tracker
-            </h1>
+    <div className="min-h-screen bg-background text-on-surface">
+      <header className="sticky top-0 z-20 bg-surface/95 supports-backdrop-filter:backdrop-blur-xl">
+        <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <AssetTile type="wax" name="Caustic Wax" size="sm" />
+            <div className="min-w-0">
+              <p className="m3-label-small text-on-surface-variant">
+                Bee Swarm
+              </p>
+              <h1 className="truncate text-xl font-medium leading-tight">
+                Planter Wax Tracker
+              </h1>
+            </div>
           </div>
           <div className="flex shrink-0 gap-2">
             <Button
@@ -187,6 +193,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
               variant="ghost"
               onClick={handleLogout}
               aria-label="Log out"
+              title="Log out"
             >
               <LogOut />
             </Button>
@@ -198,16 +205,16 @@ export function Dashboard({ onLogout }: DashboardProps) {
         <div
           role="status"
           aria-live="polite"
-          className="m3-elevation-2 fixed left-1/2 top-4 z-50 flex -translate-x-1/2 items-center gap-2 rounded-4xl border border-outline bg-surface-container-high px-4 py-2 text-sm font-semibold text-foreground"
+          className="m3-elevation-2 fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md bg-inverse-surface px-4 py-3 text-sm font-medium text-inverse-on-surface"
         >
-          <RefreshCw className="size-4 animate-spin text-primary" />
+          <RefreshCw className="size-4 animate-spin" />
           Saving changes
         </div>
       )}
 
-      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-7xl space-y-5 px-4 py-5 sm:px-6 sm:py-6">
         {error && (
-          <div className="rounded-[1.5rem] border border-destructive/25 bg-destructive/12 px-4 py-3 text-sm font-medium text-destructive">
+          <div className="rounded-xl bg-error-container px-4 py-3 text-sm font-medium text-on-error-container">
             {error}
           </div>
         )}
@@ -216,19 +223,22 @@ export function Dashboard({ onLogout }: DashboardProps) {
           {summaryCards.map((card) => (
             <Card
               key={card.label}
-              className="gap-0 border-outline bg-surface-container py-0"
+              className="gap-0 bg-surface-container-low py-0"
             >
-              <CardContent className="flex items-center justify-between gap-4 p-5">
+              <CardContent className="flex items-center justify-between gap-4 p-4">
                 <div className="space-y-1">
-                  <p className="text-sm font-semibold text-muted-foreground">
+                  <p className="m3-label-medium text-on-surface-variant">
                     {card.label}
                   </p>
-                  <p className={`text-4xl font-semibold leading-none ${card.tone}`}>
+                  <p className={`text-4xl font-medium leading-none ${card.tone}`}>
                     {card.value}
+                  </p>
+                  <p className="text-sm text-on-surface-variant">
+                    {card.supporting}
                   </p>
                 </div>
                 <div
-                  className={`grid size-12 place-items-center rounded-[1.35rem] ring-1 ${card.tile}`}
+                  className={`grid size-12 place-items-center rounded-xl ring-1 ${card.tile}`}
                 >
                   <card.icon className="size-6" />
                 </div>
@@ -238,7 +248,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
         </section>
 
         {loading ? (
-          <div className="rounded-[2rem] border border-outline bg-surface-container-low p-8 text-center text-sm font-medium text-muted-foreground">
+          <div className="rounded-xl bg-surface-container-low p-8 text-center text-sm font-medium text-on-surface-variant ring-1 ring-outline-variant">
             Loading tracker data
           </div>
         ) : (
@@ -248,35 +258,32 @@ export function Dashboard({ onLogout }: DashboardProps) {
                 <button
                   type="button"
                   onClick={() => toggleGroup(group.wax)}
-                  className="m3-state-layer flex w-full flex-col gap-4 rounded-[2rem] border border-outline bg-surface-container-low p-4 text-left transition hover:bg-surface-container sm:flex-row sm:items-center sm:justify-between"
+                  className="m3-state-layer flex w-full flex-col gap-4 rounded-xl bg-surface-container p-4 text-left ring-1 ring-outline-variant transition hover:bg-surface-container-high sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex min-w-0 items-center gap-4">
-                    <AssetTile type="wax" name={group.wax} size="lg" />
+                    <AssetTile type="wax" name={group.wax} size="md" />
                     <div>
-                      <h2 className="text-lg font-semibold leading-tight">
+                      <h2 className="text-lg font-medium leading-tight">
                         {group.wax}
                       </h2>
-                      <p className="mt-1 text-sm font-medium text-muted-foreground">
+                      <p className="mt-1 text-sm text-on-surface-variant">
                         {group.combos.length} combinations
                       </p>
                     </div>
                   </div>
 
                   <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
-                    <Badge className="bg-primary/18 text-primary ring-1 ring-primary/20 hover:bg-primary/18">
+                    <Badge>
                       {group.ready} ready
                     </Badge>
-                    <Badge
-                      variant="outline"
-                      className="border-secondary/25 bg-secondary/14 text-secondary"
-                    >
+                    <Badge variant="secondary">
                       {group.growing} growing
                     </Badge>
-                    <Badge className="bg-accent/16 text-accent ring-1 ring-accent/20 hover:bg-accent/16">
+                    <Badge className="bg-tertiary-container text-on-tertiary-container">
                       {group.cooldown} cooldown
                     </Badge>
                     <ChevronDown
-                      className={`ml-auto size-5 shrink-0 text-muted-foreground transition-transform sm:ml-1 ${
+                      className={`ml-auto size-5 shrink-0 text-on-surface-variant transition-transform sm:ml-1 ${
                         openGroups[group.wax] ? "rotate-180" : ""
                       }`}
                     />
